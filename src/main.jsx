@@ -6,25 +6,26 @@ const filters = [
   ["all", "All"],
   ["ready", "Ready"],
   ["review", "Review Needed"],
-  ["high", "High Risk"],
-  ["removed", "Rejected"]
+  ["badFit", "Bad Fit"]
 ];
 
 function statusClass(status) {
   return {
     ready: "status-ready",
     review: "status-review",
-    high: "status-high",
-    removed: "status-removed"
+    badFit: "status-bad-fit"
   }[status];
 }
 
 function workflowStatus(profile) {
+  if (profile.review.status === "badFit") {
+    return { status: "badFit", label: "Bad Fit" };
+  }
   if (profile.decision?.action === "approve") {
     return { status: "ready", label: "Ready to Share" };
   }
   if (profile.decision?.action === "remove") {
-    return { status: "removed", label: "Rejected" };
+    return { status: "badFit", label: "Bad Fit" };
   }
   return profile.review;
 }
@@ -125,13 +126,12 @@ function App() {
   }, [data, activeFilter]);
 
   const metrics = useMemo(() => {
-    if (!data) return { total: 0, ready: 0, review: 0, high: 0, removed: 0 };
+    if (!data) return { total: 0, ready: 0, review: 0, badFit: 0 };
     return {
       total: data.profiles.length,
       ready: data.profiles.filter((profile) => workflowStatus(profile).status === "ready").length,
       review: data.profiles.filter((profile) => workflowStatus(profile).status === "review").length,
-      high: data.profiles.filter((profile) => workflowStatus(profile).status === "high").length,
-      removed: data.profiles.filter((profile) => profile.decision?.action === "remove").length
+      badFit: data.profiles.filter((profile) => workflowStatus(profile).status === "badFit").length
     };
   }, [data]);
 
@@ -139,8 +139,7 @@ function App() {
     all: metrics.total,
     ready: metrics.ready,
     review: metrics.review,
-    high: metrics.high,
-    removed: metrics.removed
+    badFit: metrics.badFit
   };
 
   if (loadError) {
@@ -339,6 +338,7 @@ function ProfileCard({ profile, draftReason, onReasonChange, onSave, saving }) {
   const riskyApproval = profile.review.status !== "ready" && profile.decision?.action === "approve";
   const missingReason = riskyApproval && !draftReason.trim();
   const currentStatus = workflowStatus(profile);
+  const autoBadFit = profile.review.status === "badFit";
 
   return (
     <article className="profile-card">
@@ -379,12 +379,12 @@ function ProfileCard({ profile, draftReason, onReasonChange, onSave, saving }) {
           <button
             className={`action-button ${profile.decision?.action === "approve" ? "selected" : ""}`}
             onClick={() => onSave(profile.id, "approve")}
-            disabled={saving}
+            disabled={saving || autoBadFit}
           >
             Approve
           </button>
           <button
-            className={`action-button ${profile.decision?.action === "remove" ? "selected" : ""}`}
+            className={`action-button ${profile.decision?.action === "remove" || autoBadFit ? "selected" : ""}`}
             onClick={() => onSave(profile.id, "remove")}
             disabled={saving}
           >
@@ -401,7 +401,9 @@ function ProfileCard({ profile, draftReason, onReasonChange, onSave, saving }) {
           />
         </div>
         <p className="decision-note">
-          {missingReason
+          {autoBadFit
+            ? "Automatically marked Bad Fit because multiple hard deal-breakers conflict."
+            : missingReason
             ? "Add a short reason before keeping this risky profile."
             : profile.decision
               ? "Decision saved to the audit trail."

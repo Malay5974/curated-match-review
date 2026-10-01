@@ -373,8 +373,7 @@ h3 { margin-bottom: 3px; font-size: 18px; }
 
 .status-ready { background: var(--green-bg); color: var(--green); }
 .status-review { background: var(--amber-bg); color: var(--amber); }
-.status-high { background: var(--red-bg); color: var(--red); }
-.status-removed { background: #ece8e1; color: #5f5850; }
+.status-bad-fit { background: var(--red-bg); color: var(--red); }
 
 .system-badge {
   display: inline-flex;

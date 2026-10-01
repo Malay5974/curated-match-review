@@ -26,7 +26,7 @@ export function reviewProfile(profile) {
   }
 
   if (hardConflictCount >= 2) {
-    return { status: "high", label: "High Risk", risks };
+    return { status: "badFit", label: "Bad Fit", risks };
   }
   if (risks.length > 0) {
     return { status: "review", label: "Review Needed", risks };

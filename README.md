@@ -7,7 +7,7 @@ Curated Match Review is an internal quality gate for matchmakers. It reviews a s
 ## What It Does
 
 - Reviews profiles against client preferences and hard deal-breakers.
-- Labels each profile as `Ready to Share`, `Review Needed`, or `High Risk`.
+- Labels each profile as `Ready to Share`, `Review Needed`, or `Bad Fit`.
 - Lets a matchmaker approve or reject a profile.
 - Stores override notes and decisions in SQLite.
 - Allows new profiles to be added and reviewed by the same backend rules.
