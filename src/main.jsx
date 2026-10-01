@@ -381,14 +381,14 @@ function ProfileCard({ profile, draftReason, onReasonChange, onSave, saving }) {
         <p className="label">Matchmaker decision</p>
         <div className="action-row">
           <button
-            className={`action-button ${profile.decision?.action === "approve" || autoBestFit ? "selected" : ""}`}
+            className={`action-button ${profile.decision?.action === "approve" || autoBestFit ? "selected" : ""} ${autoBestFit ? "auto-decision" : ""}`}
             onClick={() => onSave(profile.id, "approve")}
             disabled={saving || autoBadFit || autoBestFit}
           >
             Approve
           </button>
           <button
-            className={`action-button ${profile.decision?.action === "remove" || autoBadFit ? "selected" : ""}`}
+            className={`action-button ${profile.decision?.action === "remove" || autoBadFit ? "selected" : ""} ${autoBadFit ? "auto-decision" : ""}`}
             onClick={() => onSave(profile.id, "remove")}
             disabled={saving || autoBestFit}
           >
