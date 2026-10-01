@@ -127,6 +127,32 @@ Workflow file:
 .github/workflows/ci.yml
 ```
 
+## Vercel Deployment
+
+The app is Vercel-ready:
+
+- `api/index.js` adapts the Express app to a Vercel Serverless Function.
+- `vercel.json` routes `/api/*` to the backend and all other routes to the Vite app.
+- On Vercel, the demo SQLite database is stored in `/tmp/curated-match-review`.
+
+Deploy by importing this repository in Vercel:
+
+```text
+https://github.com/Malay5974/curated-match-review
+```
+
+Use these settings:
+
+```text
+Framework Preset: Vite
+Build Command: npm run build
+Output Directory: dist
+Install Command: npm install
+Node.js Version: 24.x
+```
+
+Note: the deployed SQLite database is demo-only because serverless file storage is ephemeral. For production, replace it with hosted Postgres such as Neon, Supabase or Vercel Postgres.
+
 ## Data
 
 The local database is created automatically at:
