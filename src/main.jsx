@@ -409,7 +409,7 @@ function ProfileCard({ profile, draftReason, onReasonChange, onSave, saving }) {
           {autoBadFit
             ? "Automatically marked Bad Fit because multiple hard deal-breakers conflict."
             : autoBestFit
-            ? "Automatically approved as Best Fit because no known hard deal-breaker conflicts were found."
+            ? "Automatically approved as Best Fit for internal review. This profile is not shared with the client until the matchmaker sends it."
             : missingReason
             ? "Add a short reason before keeping this risky profile."
             : profile.decision
