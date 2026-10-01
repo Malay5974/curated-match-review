@@ -56,7 +56,7 @@ function formatRelativeTime(value) {
 function App() {
   const [data, setData] = useState(null);
   const [loadError, setLoadError] = useState("");
-  const [activeFilter, setActiveFilter] = useState("all");
+  const [activeFilter, setActiveFilter] = useState("review");
   const [draftReasons, setDraftReasons] = useState({});
   const [savingId, setSavingId] = useState("");
   const [showAddProfile, setShowAddProfile] = useState(false);
@@ -111,7 +111,7 @@ function App() {
       if (!response.ok) {
         throw new Error(`Could not reset demo: ${response.status}`);
       }
-      setActiveFilter("all");
+      setActiveFilter("review");
       setProfileDraft(defaultProfileDraft());
       await loadReview();
     } catch (error) {
@@ -133,7 +133,7 @@ function App() {
       }
       setProfileDraft(defaultProfileDraft());
       setShowAddProfile(false);
-      setActiveFilter("all");
+      setActiveFilter("review");
       await loadReview();
     } catch (error) {
       setLoadError(error.message || "Could not add profile.");
