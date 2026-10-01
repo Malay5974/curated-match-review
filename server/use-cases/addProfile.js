@@ -40,7 +40,8 @@ export function addProfile(input) {
     smoking: input.smoking.trim(),
     family: input.family.trim(),
     marriageHorizon: input.marriageHorizon.trim(),
-    psychometric: input.psychometric.trim()
+    psychometric: input.psychometric.trim(),
+    createdAt: new Date().toISOString()
   };
 
   insertProfile(profile);

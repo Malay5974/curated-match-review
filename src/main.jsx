@@ -33,6 +33,26 @@ function workflowStatus(profile) {
   return profile.review;
 }
 
+function formatRelativeTime(value) {
+  const createdAt = new Date(value).getTime();
+
+  if (!Number.isFinite(createdAt)) {
+    return "";
+  }
+
+  const diffInSeconds = Math.max(0, Math.floor((Date.now() - createdAt) / 1000));
+  const diffInMinutes = Math.floor(diffInSeconds / 60);
+  const diffInHours = Math.floor(diffInMinutes / 60);
+  const diffInDays = Math.floor(diffInHours / 24);
+  const diffInWeeks = Math.floor(diffInDays / 7);
+
+  if (diffInSeconds < 60) return "Just now";
+  if (diffInMinutes < 60) return `${diffInMinutes} ${diffInMinutes === 1 ? "min" : "mins"} ago`;
+  if (diffInHours < 24) return `${diffInHours} ${diffInHours === 1 ? "hour" : "hours"} ago`;
+  if (diffInDays < 7) return `${diffInDays} ${diffInDays === 1 ? "day" : "days"} ago`;
+  return `${diffInWeeks} ${diffInWeeks === 1 ? "week" : "weeks"} ago`;
+}
+
 function App() {
   const [data, setData] = useState(null);
   const [loadError, setLoadError] = useState("");
@@ -344,23 +364,27 @@ function ProfileCard({ profile, draftReason, onReasonChange, onSave, saving }) {
   const autoBadFit = profile.review.status === "badFit";
   const autoBestFit = profile.review.status === "ready";
   const selectedAction = profile.decision?.action || (autoBestFit ? "approve" : autoBadFit ? "remove" : "");
+  const addedLabel = formatRelativeTime(profile.createdAt);
 
   return (
     <article className="profile-card">
-      <div>
-        <div className="badge-row">
-          <span className={`status-badge ${statusClass(currentStatus.status)}`}>{currentStatus.label}</span>
-          {currentStatus.status !== profile.review.status && (
-            <span className={`system-badge ${statusClass(profile.review.status)}`}>System: {profile.review.label}</span>
-          )}
+      <div className="profile-summary">
+        <div>
+          <div className="badge-row">
+            <span className={`status-badge ${statusClass(currentStatus.status)}`}>{currentStatus.label}</span>
+            {currentStatus.status !== profile.review.status && (
+              <span className={`system-badge ${statusClass(profile.review.status)}`}>System: {profile.review.label}</span>
+            )}
+          </div>
+          <h3>{profile.name}</h3>
+          <p className="muted-text">{profile.title}</p>
+          <div className="profile-meta">
+            <span className="meta-pill">{profile.id}</span>
+            <span className="meta-pill">{profile.city}, {profile.country}</span>
+            <span className="meta-pill">{profile.marriageHorizon}</span>
+          </div>
         </div>
-        <h3>{profile.name}</h3>
-        <p className="muted-text">{profile.title}</p>
-        <div className="profile-meta">
-          <span className="meta-pill">{profile.id}</span>
-          <span className="meta-pill">{profile.city}, {profile.country}</span>
-          <span className="meta-pill">{profile.marriageHorizon}</span>
-        </div>
+        {addedLabel && <p className="added-time">Added {addedLabel}</p>}
       </div>
 
       <div>

@@ -5,16 +5,22 @@ export function countProfiles() {
 }
 
 export function insertSeedProfile(profile) {
-  db.prepare("INSERT INTO profiles VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)").run(...profile);
+  db.prepare(`
+    INSERT INTO profiles (
+      id, name, title, city, country, religion, caste, sect, religiosity,
+      food, alcohol, smoking, family, marriage_horizon, psychometric, created_at
+    )
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `).run(...profile);
 }
 
 export function insertProfile(profile) {
   db.prepare(`
     INSERT INTO profiles (
       id, name, title, city, country, religion, caste, sect, religiosity,
-      food, alcohol, smoking, family, marriage_horizon, psychometric
+      food, alcohol, smoking, family, marriage_horizon, psychometric, created_at
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `).run(
     profile.id,
     profile.name,
@@ -30,7 +36,8 @@ export function insertProfile(profile) {
     profile.smoking,
     profile.family,
     profile.marriageHorizon,
-    profile.psychometric
+    profile.psychometric,
+    profile.createdAt
   );
 }
 
@@ -62,6 +69,7 @@ export function serializeProfile(row) {
     smoking: row.smoking,
     family: row.family,
     marriageHorizon: row.marriage_horizon,
-    psychometric: row.psychometric
+    psychometric: row.psychometric,
+    createdAt: row.created_at
   };
 }

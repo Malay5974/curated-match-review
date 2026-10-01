@@ -33,7 +33,8 @@ export function migrateDatabase() {
       smoking TEXT NOT NULL,
       family TEXT NOT NULL,
       marriage_horizon TEXT NOT NULL,
-      psychometric TEXT NOT NULL
+      psychometric TEXT NOT NULL,
+      created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
     );
 
     CREATE TABLE IF NOT EXISTS decisions (
@@ -44,4 +45,12 @@ export function migrateDatabase() {
       FOREIGN KEY(profile_id) REFERENCES profiles(id)
     );
   `);
+
+  const profileColumns = db.prepare("PRAGMA table_info(profiles)").all();
+  const hasCreatedAt = profileColumns.some((column) => column.name === "created_at");
+
+  if (!hasCreatedAt) {
+    db.exec("ALTER TABLE profiles ADD COLUMN created_at TEXT");
+    db.prepare("UPDATE profiles SET created_at = ? WHERE created_at IS NULL").run(new Date().toISOString());
+  }
 }
