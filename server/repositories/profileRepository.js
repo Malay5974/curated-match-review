@@ -42,7 +42,7 @@ export function insertProfile(profile) {
 }
 
 export function getAllProfiles() {
-  return db.prepare("SELECT * FROM profiles ORDER BY id").all();
+  return db.prepare("SELECT * FROM profiles ORDER BY datetime(created_at) DESC, id DESC").all();
 }
 
 export function getProfileById(profileId) {
