@@ -4,7 +4,7 @@ import "./styles.css";
 
 const filters = [
   ["all", "All"],
-  ["ready", "Ready"],
+  ["ready", "Best Fit"],
   ["review", "Review Needed"],
   ["badFit", "Bad Fit"]
 ];
@@ -21,8 +21,11 @@ function workflowStatus(profile) {
   if (profile.review.status === "badFit") {
     return { status: "badFit", label: "Bad Fit" };
   }
+  if (profile.review.status === "ready") {
+    return { status: "ready", label: "Best Fit" };
+  }
   if (profile.decision?.action === "approve") {
-    return { status: "ready", label: "Ready to Share" };
+    return { status: "ready", label: "Best Fit" };
   }
   if (profile.decision?.action === "remove") {
     return { status: "badFit", label: "Bad Fit" };
@@ -339,6 +342,7 @@ function ProfileCard({ profile, draftReason, onReasonChange, onSave, saving }) {
   const missingReason = riskyApproval && !draftReason.trim();
   const currentStatus = workflowStatus(profile);
   const autoBadFit = profile.review.status === "badFit";
+  const autoBestFit = profile.review.status === "ready";
 
   return (
     <article className="profile-card">
@@ -377,16 +381,16 @@ function ProfileCard({ profile, draftReason, onReasonChange, onSave, saving }) {
         <p className="label">Matchmaker decision</p>
         <div className="action-row">
           <button
-            className={`action-button ${profile.decision?.action === "approve" ? "selected" : ""}`}
+            className={`action-button ${profile.decision?.action === "approve" || autoBestFit ? "selected" : ""}`}
             onClick={() => onSave(profile.id, "approve")}
-            disabled={saving || autoBadFit}
+            disabled={saving || autoBadFit || autoBestFit}
           >
             Approve
           </button>
           <button
             className={`action-button ${profile.decision?.action === "remove" || autoBadFit ? "selected" : ""}`}
             onClick={() => onSave(profile.id, "remove")}
-            disabled={saving}
+            disabled={saving || autoBestFit}
           >
             Reject
           </button>
@@ -403,6 +407,8 @@ function ProfileCard({ profile, draftReason, onReasonChange, onSave, saving }) {
         <p className="decision-note">
           {autoBadFit
             ? "Automatically marked Bad Fit because multiple hard deal-breakers conflict."
+            : autoBestFit
+            ? "Automatically approved as Best Fit because no known hard deal-breaker conflicts were found."
             : missingReason
             ? "Add a short reason before keeping this risky profile."
             : profile.decision

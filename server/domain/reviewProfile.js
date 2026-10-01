@@ -31,5 +31,5 @@ export function reviewProfile(profile) {
   if (risks.length > 0) {
     return { status: "review", label: "Review Needed", risks };
   }
-  return { status: "ready", label: "Ready to Share", risks: ["No known hard deal-breaker conflicts found."] };
+  return { status: "ready", label: "Best Fit", risks: ["No known hard deal-breaker conflicts found."] };
 }
