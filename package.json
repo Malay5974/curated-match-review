@@ -8,6 +8,8 @@
     "server": "node server/index.js",
     "client": "vite",
     "build": "vite build",
+    "check:server": "find server -maxdepth 4 -name '*.js' -print0 | xargs -0 -n1 node --check",
+    "check": "npm run check:server && npm run build",
     "preview": "vite preview --host 127.0.0.1",
     "start": "NODE_ENV=production node server/index.js"
   },

@@ -56,7 +56,7 @@ else
 fi
 
 info "Checking backend syntax..."
-node --check server/index.js
+npm run check:server
 ok "Backend syntax check passed"
 
 info "Building React frontend..."
@@ -80,8 +80,8 @@ Open in browser:
   http://127.0.0.1:5183/
 
 Useful checks:
-  npm run build
-  node --check server/index.js
+  npm run check
+  npm run check:server
 
 Notes:
   - The React app runs on port 5183.
