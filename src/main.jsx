@@ -18,17 +18,17 @@ function statusClass(status) {
 }
 
 function workflowStatus(profile) {
-  if (profile.review.status === "badFit") {
-    return { status: "badFit", label: "Bad Fit" };
-  }
-  if (profile.review.status === "ready") {
-    return { status: "ready", label: "Best Fit" };
-  }
   if (profile.decision?.action === "approve") {
     return { status: "ready", label: "Best Fit" };
   }
   if (profile.decision?.action === "remove") {
     return { status: "badFit", label: "Bad Fit" };
+  }
+  if (profile.review.status === "badFit") {
+    return { status: "badFit", label: "Bad Fit" };
+  }
+  if (profile.review.status === "ready") {
+    return { status: "ready", label: "Best Fit" };
   }
   return profile.review;
 }
@@ -343,6 +343,7 @@ function ProfileCard({ profile, draftReason, onReasonChange, onSave, saving }) {
   const currentStatus = workflowStatus(profile);
   const autoBadFit = profile.review.status === "badFit";
   const autoBestFit = profile.review.status === "ready";
+  const selectedAction = profile.decision?.action || (autoBestFit ? "approve" : autoBadFit ? "remove" : "");
 
   return (
     <article className="profile-card">
@@ -381,16 +382,16 @@ function ProfileCard({ profile, draftReason, onReasonChange, onSave, saving }) {
         <p className="label">Matchmaker decision</p>
         <div className="action-row">
           <button
-            className={`action-button ${profile.decision?.action === "approve" || autoBestFit ? "selected" : ""} ${autoBestFit ? "auto-decision" : ""}`}
+            className={`action-button ${selectedAction === "approve" ? "selected" : ""}`}
             onClick={() => onSave(profile.id, "approve")}
-            disabled={saving || autoBadFit || autoBestFit}
+            disabled={saving}
           >
             Approve
           </button>
           <button
-            className={`action-button ${profile.decision?.action === "remove" || autoBadFit ? "selected" : ""} ${autoBadFit ? "auto-decision" : ""}`}
+            className={`action-button ${selectedAction === "remove" ? "selected" : ""}`}
             onClick={() => onSave(profile.id, "remove")}
-            disabled={saving || autoBestFit}
+            disabled={saving}
           >
             Reject
           </button>
