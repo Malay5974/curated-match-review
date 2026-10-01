@@ -388,7 +388,7 @@ function ProfileCard({ profile, draftReason, onReasonChange, onSave, saving }) {
             onClick={() => onSave(profile.id, "remove")}
             disabled={saving}
           >
-            Remove
+            Reject
           </button>
         </div>
         <div className="override-box">

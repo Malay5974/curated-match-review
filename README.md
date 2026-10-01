@@ -2,13 +2,13 @@
 
 Full-stack assessment prototype for The Date Crew.
 
-Curated Match Review is an internal quality gate for matchmakers. It reviews a shortlisted set of profiles before they are shared with a client, flags avoidable risks, and keeps the final approve/remove decision with the matchmaker.
+Curated Match Review is an internal quality gate for matchmakers. It reviews a shortlisted set of profiles before they are shared with a client, flags avoidable risks, and keeps the final approve/reject decision with the matchmaker.
 
 ## What It Does
 
 - Reviews profiles against client preferences and hard deal-breakers.
 - Labels each profile as `Ready to Share`, `Review Needed`, or `High Risk`.
-- Lets a matchmaker approve or remove a profile.
+- Lets a matchmaker approve or reject a profile.
 - Stores override notes and decisions in SQLite.
 - Allows new profiles to be added and reviewed by the same backend rules.
 - Includes a reset action so reviewers can replay the demo from a clean state.
